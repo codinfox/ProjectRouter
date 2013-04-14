@@ -26,7 +26,6 @@ function mapInit() {
         mapObj.bind(toolbar, "location", function(e) {
             var center = e.position.center;
             currentPos = center;
-            console.log(center);
             var geocoderOption = {
                 range : 300, // 范围
                 crossnum : 2, // 道路交叉口数
@@ -36,7 +35,6 @@ function mapInit() {
             var geocoder = new AMap.Geocoder(geocoderOption);
             geocoder.regeocode(center, function(data) {
                 currPosGeo = data;
-                console.log(data);
                 document.getElementById("city").value = data.list[0].city.citycode;
             });
         });
@@ -121,14 +119,9 @@ function routeChange_search(city, keywords) {
 }
 
 function routeChange_useCurrPos() {
-    routeS.start_x = currPosGeo.list[0].poilist[0].x;
-    routeS.start_y = currPosGeo.list[0].poilist[0].y;
-    routeS.start_name = currPosGeo.list[0].poilist[0].name;
-    routeS.start_address = currPosGeo.list[0].poilist[0].address;
-    routeS.start_tel = currPosGeo.list[0].poilist[0].tel;
-    routeS.start_type = currPosGeo.list[0].poilist[0].type;
-    routeS.start_pid = currPosGeo.list[0].poilist[0].pguid;
-    routeS.start_citycode = currPosGeo.list[0].poilist[0].citycode;
+    console.log(currentPos);
+    routeS.start_x = currentPos.lng;
+    routeS.start_y = currentPos.lat;
     routechange_EndSearch();
 }
 
@@ -174,6 +167,7 @@ function routechange_EndSearch() {
 function routeChangeSearchXY() {
     var avoidroad = document.getElementById("avoid").value;
     var startXY = new AMap.LngLat(routeS.start_x, routeS.start_y);
+    console.log(startXY);
     var endXY = new AMap.LngLat(routeS.end_x, routeS.end_y);
     var routeSearchOption = {
         routeType : 4,
@@ -204,7 +198,6 @@ function routeChangeSearchXY_CallBack(data) {
         var route_content = new Array();
         routeS.xy_array = new Array();
         var arr = new Array();
-        //console.log(routeS);
         for (var i = 0; i < route_count; i++) {
 
             routeS.xy_array[i] = data.list[i].coor;
