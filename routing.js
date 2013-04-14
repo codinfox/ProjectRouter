@@ -222,7 +222,28 @@ function routeChangeSearchXY() {
     routeSearch.getNaviPath(arr, routeChangeSearchXY_CallBack);
 }
 
-function routeChangeSearchXY_CallBack(data) {
+function routeChangeSearchXY_CallBack(data) { //TODO:增加与服务器交互
+    var json = JSON.stringify(data);
+    var conn = new XMLHttpRequest();
+    //conn.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+    conn.onreadystatechange = function() {
+        console.log(conn.readyState);
+        console.log(conn.status);
+        if (conn.readyState == 4 && conn.status == 200) {
+            alert(conn.responseText);
+        }
+    }
+
+    conn.open("GET", "../test3.html", true);
+    conn.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    conn.send("q=a");
+    //console.log(json);
+    
+    
+    routeChangeSearchXY_Display(data);
+}
+
+function routeChangeSearchXY_Display(data) {
 
     var resultStr = "";
     var route_count = data.count;
