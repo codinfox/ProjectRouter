@@ -119,42 +119,79 @@ function routeChange_search(city, keywords) {
 }
 
 function routeChange_useCurrPos() {
-    console.log(currentPos);
     routeS.start_x = currentPos.lng;
     routeS.start_y = currentPos.lat;
     routechange_EndSearch();
 }
 
+function routeChange_choose(option, index) {
+    if (option == "s")
+        routeS.start_displayname = query_data.list[index].name;
+    else if (option == "e")
+        routeS.end_displayname = query_data.list[index].name;
+    routeChange_setStartEndInfo(option, query_data.list[index]);
+}
+
+function routeChange_multipleChoice(option, data) {
+    var msg = "";
+    for (var i = 0; i < data.record; i++) {
+        msg += "<tr onclick=\"routeChange_choose('" + option + "'," + i + ");void(0);\"><td align=\"left\">" + (i + 1) + ". " + data.list[i].name + "</td></tr>";
+    }
+    var n;
+    if (option == "s")
+        n = "起点";
+    else if (option == "e")
+        n = "终点";
+    else
+        n = "error";
+    var disp = "<table><td><tr><strong>" + n + "关键字对应多条结果，请选择：</strong></tr>" + msg + "</td></table>";
+    document.getElementById("result").innerHTML = disp;
+}
+
+function routeChange_setStartEndInfo(option, data) {
+    if (option == "s") {
+        routeS.start_x = data.x;
+        routeS.start_y = data.y;
+        routeS.start_name = data.name;
+        routeS.start_address = data.address;
+        routeS.start_tel = data.tel;
+        routeS.start_type = data.type;
+        routeS.start_pid = data.pguid;
+        routeS.start_citycode = data.citycode;
+        routechange_EndSearch();
+    } else if (option == "e") {
+        routeS.end_x = data.x;
+        routeS.end_y = data.y;
+        routeS.end_name = data.name;
+        routeS.end_address = data.address;
+        routeS.end_tel = data.tel;
+        routeS.end_type = data.type;
+        routeS.end_pid = data.pguid;
+        routeS.end_citycode = data.citycode;
+        routeChangeSearchXY();
+    }
+}
+
+var query_data;
+
 function routeChange_search_CallBack(data) {
+    query_data = data;
     if (routeS.routeSType == "s") {
         if (data.list == null) {
             document.getElementById("result").innerHTML = "起点未查找到任何结果!<br />建议：<br />1.请确保所有字词拼写正确。<br />2.尝试不同的关键字。<br />3.尝试更宽泛的关键字。";
+        } else if (data.record == 1) {
+            routeChange_setStartEndInfo("s", data.list[0]);
         } else {
-            routeS.start_x = data.list[0].x;
-            routeS.start_y = data.list[0].y;
-            routeS.start_name = data.list[0].name;
-            routeS.start_address = data.list[0].address;
-            routeS.start_tel = data.list[0].tel;
-            routeS.start_type = data.list[0].type;
-            routeS.start_pid = data.list[0].pguid;
-            routeS.start_citycode = data.list[0].citycode;
-            routechange_EndSearch();
-
+            routeChange_multipleChoice("s", data);
         }
     } else if (routeS.routeSType == "e") {
 
         if (data.status == "E1") {
             document.getElementById("result").innerHTML = "终点未查找到任何结果!<br />建议：<br />1.请确保所有字词拼写正确。<br />2.尝试不同的关键字。<br />3.尝试更宽泛的关键字。";
+        } else if (data.record == 1) {
+            routeChange_setStartEndInfo("e", data.list[0]);
         } else {
-            routeS.end_x = data.list[0].x;
-            routeS.end_y = data.list[0].y;
-            routeS.end_name = data.list[0].name;
-            routeS.end_address = data.list[0].address;
-            routeS.end_tel = data.list[0].tel;
-            routeS.end_type = data.list[0].type;
-            routeS.end_pid = data.list[0].pguid;
-            routeS.end_citycode = data.list[0].citycode;
-            routeChangeSearchXY();
+            routeChange_multipleChoice("e", data);
         }
     }
 }
@@ -167,7 +204,6 @@ function routechange_EndSearch() {
 function routeChangeSearchXY() {
     var avoidroad = document.getElementById("avoid").value;
     var startXY = new AMap.LngLat(routeS.start_x, routeS.start_y);
-    console.log(startXY);
     var endXY = new AMap.LngLat(routeS.end_x, routeS.end_y);
     var routeSearchOption = {
         routeType : 4,
