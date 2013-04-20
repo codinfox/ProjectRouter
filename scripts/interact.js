@@ -70,12 +70,20 @@ $(document).ready(function() {
     
     var realtimetraff = false;
     $("#RealTimeSwitch").click(function(){
+        var on, off;
+        if (isRetinaScreen) {
+            on = "./images/rton@2x.png";
+            off = "./images/rt@2x.png";
+        } else {
+            off = "./images/rt.png";
+            on =  "./images/rton.png";
+        }
         if (!realtimetraff) {
-            $(this).attr("src", "./images/rton.png");
+            $(this).attr("src", on);
             addTileLayer_TRAFFIC();    
             realtimetraff = true;
         } else {
-            $(this).attr("src", "./images/rt.png");
+            $(this).attr("src", off);
             removeTileLayer_TRAFFIC();
             realtimetraff = false;
         }

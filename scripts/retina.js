@@ -1,3 +1,5 @@
+var isRetinaScreen = true;
+
 (function() {
 
   var root = (typeof exports == 'undefined' ? window : exports);
@@ -46,6 +48,7 @@
     if (root.matchMedia && root.matchMedia(mediaQuery).matches)
       return true;
 
+    isRetinaScreen = false;
     return false;
   };
 
