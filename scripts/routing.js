@@ -4,6 +4,7 @@ var MYPOS = "我的位置";
 
 var mapObj, toolbar, overview;
 var currentPos, currPosGeo;
+var Trafficlay;
 
 function mapInit() {
     var opt = {
@@ -35,11 +36,25 @@ function mapInit() {
             geocoder.regeocode(center, function(data) {
                 currPosGeo = data;
                 updateCity(data.list[0].city.citycode);
-                //interact.js
             });
         });
     });
+    addTileLayer_TRAFFIC();
 }
+
+function addTileLayer_TRAFFIC() {
+    mapObj.clearOverlays();
+    Trafficlay = new AMap.TileLayer({
+        tileSize : 256, //图像大小
+        zIndex : 5,
+        id : "t",
+        getTileUrl : function(x, y, z) {
+            return "http://tm.mapabc.com/trafficengine/mapabc/traffictile?v=1.0&;t=1&zoom=" + (17 - z) + "&x=" + x + "&y=" + y;
+        }
+    });
+    mapObj.addLayer(Trafficlay);
+}
+
 
 function routeSearch() {
     this.routeSType = "s";
@@ -228,13 +243,13 @@ function routeChangeSearchXY_CallBack(data) {//TODO:增加与服务器交互
     // var conn = new XMLHttpRequest();
     // //conn.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
     // conn.onreadystatechange = function() {
-        // console.log(conn.readyState);
-        // console.log(conn.status);
-        // if (conn.readyState == 4 && conn.status == 200) {
-            // alert(conn.responseText);
-        // }
+    // console.log(conn.readyState);
+    // console.log(conn.status);
+    // if (conn.readyState == 4 && conn.status == 200) {
+    // alert(conn.responseText);
     // }
-// 
+    // }
+    //
     // conn.open("GET", "../test3.html", true);
     // conn.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     // conn.send("q=a");
@@ -376,31 +391,8 @@ function driveLineDrawFoldline_click(num, count) {//画线路并控制左边列�
     });
     mapObj.addOverlays(line);
     mapObj.setCenter(arr[parseInt(arr.length / 2)]);
-
 }
 
-function TipContents(type, address, tel) {
-
-    if (type == "" || type == "undefined" || type == null || type == " undefined" || typeof type == "undefined") {
-
-        type = "暂无";
-    }
-
-    if (address == "" || address == "undefined" || address == null || address == " undefined" || typeof address == "undefined") {
-
-        address = "暂无";
-    }
-
-    if (tel == "" || tel == "undefined" || tel == null || tel == " undefined" || typeof address == "tel") {
-
-        tel = "暂无";
-
-    }
-
-    var str = "<br>地址：" + address + "<br>电话：" + tel + " <br>类型：" + type;
-
-    return str;
-}
 
 function updateCity(city) {
     $("#city").val(city);
