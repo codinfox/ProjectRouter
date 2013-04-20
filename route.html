@@ -3,62 +3,31 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <meta name="viewport" content="initial-scale=1.0, user-scalable=no" >
-        <link rel="stylesheet" href="/Public/Css/demo.Default.css" type="text/css" />
+        <link rel="stylesheet" href="style.css" type="text/css" />
 
         <title>驾车导航查询</title>
-        <style>
-			body {
-				height: 100%;
-				margin: 0;
-				padding: 0;
-				font: 12px/16px Verdana, Helvetica, Arial, sans-serif;
-			}
-			html {
-				height: 100%;
-			}
-			#iCenter {
-				height: 100%;
-				width: 100%
-			}
-        </style>
-
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-        <script src="http://webapi.amap.com/maps?v=1.1&key=fce4fe9f75597b394fad3b98ed53e43d"></script>
-        <script src="routing.js"></script>
-
-        <script>
-        //控制每一次显示panel的行为
-            var countclick = 0;
-            $(document).ready(function(e) {
-                $("#sbutton").click(function(e) {
-                    if (countclick == 0) {
-                        $("#iSearch").animate({
-                            left : '-200px',
-                            opacity : '0'
-                        }, 1000);
-                        countclick = 1;
-                        document.getElementById("sbutton").innerHTML = "Show Search";
-                    } else {
-                        $("#iSearch").animate({
-                            left : '0px',
-                            opacity : '1'
-                        }, 1000);
-                        countclick = 0;
-                        document.getElementById("sbutton").innerHTML = "Hide Search";
-                    }
-                });
-            });
-        </script>
     </head>
 
     <body onload="mapInit();">
-        <div id="iCenter"></div>
-        <div style="position:fixed; top:20px; right:0px; z-index:100;">
-            <button id="sbutton">
-                Hide Search
-            </button>
+
+        <div id="NaviBar">
+            <!-- 顶部导航 -->
+            <img id="SidebarButton" src="./images/showsidebar.png">
+            <div id="CityOption">
+                <img class="doLocation" id="LocBlue" src="./images/locblue.png"/>
+                <div id="ChooseCity">
+                    <p id="CityName">乌鲁木齐</p>
+                    <img id="OptBlue" src="./images/optblue.png" />
+                </div>
+            </div>
         </div>
-        <div id="iSearch" style="padding:2px 0px 0px 5px;font-size:12px; z-index:1000; background-color:white;height:100%; width:200px; position:fixed; left:0px; top:0px;">
+
+        <div id="MapView"></div>
+
+        <div id="SearchPanel" style=";">
+            <div id="SearchPanelLabel">
+                       <p>线路检索</p>
+            </div>
             <div>
                 驾车导航查询 <b>从：</b>
                 <input type="text" id="city" name="city" value="城市名或区号" />
@@ -84,5 +53,12 @@
             <tr>
                 <td><div id="result" name="result" style="overflow:auto;margin-top:5px;width:200px;height:50%"></div>
         </div>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+        <script src="http://webapi.amap.com/maps?v=1.1&key=fce4fe9f75597b394fad3b98ed53e43d"></script>
+        <script src="./scripts/routing.js"></script>
+        <script src="./scripts/interact.js"></script>
+        <script src="./scripts/retina.js"></script>
+
     </body>
 </html>

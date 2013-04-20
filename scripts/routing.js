@@ -12,7 +12,7 @@ function mapInit() {
         doubleClickZoom : true,
         scrollWheel : true
     }
-    mapObj = new AMap.Map("iCenter", opt);
+    mapObj = new AMap.Map("MapView", opt);
     AMap.Conf.network = 1;
     mapObj.plugin(["AMap.ToolBar", "AMap.OverView"], function() {
         toolbar = new AMap.ToolBar({
@@ -21,6 +21,7 @@ function mapInit() {
             direction : true
         });
         mapObj.addControl(toolbar);
+        toolbar.setOffset(new AMap.Pixel(10,60)); 
         overview = new AMap.OverView();
         mapObj.addControl(overview);
         mapObj.bind(toolbar, "location", function(e) {
