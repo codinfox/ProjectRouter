@@ -85,7 +85,7 @@ div#SearchPanelLabel { /*线路搜索标签*/
 	font-family: \534E\6587\9ED1\4F53;
 	font-size: 15px;
 	color: white;
-	height: 50px;
+	height: 70px;
 	width: 250px;
 	position: absolute;
 	top: 0px;
@@ -94,10 +94,21 @@ div#SearchPanelLabel { /*线路搜索标签*/
 	padding-left: 10px;
 }
 
-#avoid {
+div#SearchBox { /*起点终点搜索框样式*/
+	position: absolute;
+	top: 50px;
+}
+
+#SearchBox .inputBox {
 	border-radius: 10px;
-	height: 20px;
-	width: 150;
-	border-color: yellow;
+	height: 30px;
+	width: 190px;
+	border-color: #ffc000;
 	border-style: solid;
+	font-size: 20px;
+	border-width: 2px;
+	background-color: #eeeeee;
+	font-family: \534E\6587\9ED1\4F53;
+	margin-bottom: 2px;
+	margin-top: 2px;
 }

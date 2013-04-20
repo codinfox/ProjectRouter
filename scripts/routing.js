@@ -8,22 +8,20 @@ var currentPos, currPosGeo;
 function mapInit() {
     var opt = {
         level : 13,
-        center : new AMap.LngLat(116.397428, 39.90923),
+        center : new AMap.LngLat(121.49854, 31.28540),//同济大学
         doubleClickZoom : true,
         scrollWheel : true
     }
     mapObj = new AMap.Map("MapView", opt);
     AMap.Conf.network = 1;
-    mapObj.plugin(["AMap.ToolBar", "AMap.OverView"], function() {
+    mapObj.plugin(["AMap.ToolBar"], function() {
         toolbar = new AMap.ToolBar({
+            offset: new AMap.Pixel(10,60),
             autoPosition : true,
             ruler : false,
-            direction : true
+            direction : false,
         });
         mapObj.addControl(toolbar);
-        toolbar.setOffset(new AMap.Pixel(10,60)); 
-        overview = new AMap.OverView();
-        mapObj.addControl(overview);
         mapObj.bind(toolbar, "location", function(e) {
             var center = e.position.center;
             currentPos = center;
@@ -80,8 +78,8 @@ var routeS = new routeSearch();
 
 function route_search() {
     routeS.cityname = document.getElementById("city").value;
-    routeS.start_displayname = routeS.start_name = document.getElementById("keyword").value;
-    routeS.end_displayname = routeS.end_name = document.getElementById("keyword1").value;
+    routeS.start_displayname = routeS.start_name = document.getElementById("startpoint").value;
+    routeS.end_displayname = routeS.end_name = document.getElementById("endpoint").value;
     var i = 1;
     var che = "";
     if (routeS.cityname == "" || routeS.cityname == "城市名或区号") {
