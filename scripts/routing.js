@@ -48,7 +48,7 @@ function mapInit() {
             });
         });
     });
-    addTileLayer_TRAFFIC();
+    //addTileLayer_TRAFFIC();
 }
 
 function addTileLayer_TRAFFIC() {

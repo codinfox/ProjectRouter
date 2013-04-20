@@ -67,4 +67,19 @@ $(document).ready(function() {
         updateCity(a);
         toggleChoosePanel();
     });
+    
+    var realtimetraff = false;
+    $("#RealTimeSwitch").click(function(){
+        if (!realtimetraff) {
+            $(this).attr("src", "./images/rton.png");
+            addTileLayer_TRAFFIC();    
+            realtimetraff = true;
+        } else {
+            $(this).attr("src", "./images/rt.png");
+            removeTileLayer_TRAFFIC();
+            realtimetraff = false;
+        }
+        
+    });
+    
 }); 

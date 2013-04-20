@@ -65,6 +65,11 @@ p#CityName {/*城市名称*/
 	right: 30px;
 	top: 5px;
 }
+#RealTimeSwitch {
+	position:fixed;
+	right: 130px;
+	top: 13px;
+}
 
 /*搜索面板样式设定*/
 div#SearchPanel {
