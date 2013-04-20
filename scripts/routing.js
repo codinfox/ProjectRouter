@@ -4,7 +4,7 @@ var MYPOS = "我的位置";
 
 var mapObj, toolbar, overview;
 var currentPos, currPosGeo;
-var Trafficlay;
+var Trafficlay, partition;
 
 function mapInit() {
     var opt = {
@@ -14,6 +14,7 @@ function mapInit() {
         scrollWheel : true
     }
     mapObj = new AMap.Map("MapView", opt);
+    partition = new AMap.Partition();
     AMap.Conf.network = 1;
     mapObj.plugin(["AMap.ToolBar"], function() {
         toolbar = new AMap.ToolBar({
@@ -35,7 +36,15 @@ function mapInit() {
             var geocoder = new AMap.Geocoder(geocoderOption);
             geocoder.regeocode(center, function(data) {
                 currPosGeo = data;
-                updateCity(data.list[0].city.citycode);
+                partition.byCity(data.list[0].city.citycode, function(data1) {
+                    var cityname;
+                    if (data1.status == "E0") {
+                        cityname = data1.city.name;
+                        console.log(cityname);
+                    } else
+                        cityname = data.list[0].city.citycode;
+                    updateCity(cityname);
+                });
             });
         });
     });
@@ -47,7 +56,7 @@ function addTileLayer_TRAFFIC() {
     Trafficlay = new AMap.TileLayer({
         tileSize : 256, //图像大小
         zIndex : 5,
-        id : "t",
+        id : "realtime_traffic",
         getTileUrl : function(x, y, z) {
             return "http://tm.mapabc.com/trafficengine/mapabc/traffictile?v=1.0&;t=1&zoom=" + (17 - z) + "&x=" + x + "&y=" + y;
         }
@@ -55,6 +64,9 @@ function addTileLayer_TRAFFIC() {
     mapObj.addLayer(Trafficlay);
 }
 
+function removeTileLayer_TRAFFIC() {
+    mapObj.removeLayer("realtime_traffic");
+}
 
 function routeSearch() {
     this.routeSType = "s";
@@ -393,7 +405,8 @@ function driveLineDrawFoldline_click(num, count) {//画线路并控制左边列�
     mapObj.setCenter(arr[parseInt(arr.length / 2)]);
 }
 
-
-function updateCity(city) {
-    $("#city").val(city);
+function updateCity(city_name) {
+    console.log(city_name);
+    $("#city").val(city_name);
+    $("p#CityName").html(city_name);
 }
