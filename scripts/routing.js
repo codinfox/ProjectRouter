@@ -8,7 +8,7 @@ var currentPos, currPosGeo;
 function mapInit() {
     var opt = {
         level : 13,
-        center : new AMap.LngLat(121.49854, 31.28540),//同济大学
+        center : new AMap.LngLat(121.49854, 31.28540), //同济大学
         doubleClickZoom : true,
         scrollWheel : true
     }
@@ -16,7 +16,7 @@ function mapInit() {
     AMap.Conf.network = 1;
     mapObj.plugin(["AMap.ToolBar"], function() {
         toolbar = new AMap.ToolBar({
-            offset: new AMap.Pixel(10,60),
+            offset : new AMap.Pixel(10, 60),
             autoPosition : true,
             ruler : false,
             direction : false,
@@ -34,7 +34,8 @@ function mapInit() {
             var geocoder = new AMap.Geocoder(geocoderOption);
             geocoder.regeocode(center, function(data) {
                 currPosGeo = data;
-                document.getElementById("city").value = data.list[0].city.citycode;
+                updateCity(data.list[0].city.citycode);
+                //interact.js
             });
         });
     });
@@ -78,6 +79,7 @@ var routeS = new routeSearch();
 
 function route_search() {
     routeS.cityname = document.getElementById("city").value;
+    console.log("city:" + routeS.cityname);
     routeS.start_displayname = routeS.start_name = document.getElementById("startpoint").value;
     routeS.end_displayname = routeS.end_name = document.getElementById("endpoint").value;
     var i = 1;
@@ -144,7 +146,7 @@ function routeChange_multipleChoice(option, data) {
     else
         n = "error";
     var disp = "<table><td><tr><strong>" + n + "关键字对应多条结果，请选择：</strong></tr>" + msg + "</td></table>";
-    document.getElementById("result").innerHTML = disp;
+    document.getElementById("SearchResult").innerHTML = disp;
 }
 
 function routeChange_setStartEndInfo(option, data) {
@@ -177,7 +179,7 @@ function routeChange_search_CallBack(data) {
     query_data = data;
     if (routeS.routeSType == "s") {
         if (data.list == null) {
-            document.getElementById("result").innerHTML = "起点未查找到任何结果!<br />建议：<br />1.请确保所有字词拼写正确。<br />2.尝试不同的关键字。<br />3.尝试更宽泛的关键字。";
+            document.getElementById("SearchResult").innerHTML = "起点未查找到任何结果!<br />建议：<br />1.请确保所有字词拼写正确。<br />2.尝试不同的关键字。<br />3.尝试更宽泛的关键字。";
         } else if (data.record == 1) {
             routeChange_setStartEndInfo("s", data.list[0]);
         } else {
@@ -186,7 +188,7 @@ function routeChange_search_CallBack(data) {
     } else if (routeS.routeSType == "e") {
 
         if (data.status == "E1") {
-            document.getElementById("result").innerHTML = "终点未查找到任何结果!<br />建议：<br />1.请确保所有字词拼写正确。<br />2.尝试不同的关键字。<br />3.尝试更宽泛的关键字。";
+            document.getElementById("SearchResult").innerHTML = "终点未查找到任何结果!<br />建议：<br />1.请确保所有字词拼写正确。<br />2.尝试不同的关键字。<br />3.尝试更宽泛的关键字。";
         } else if (data.record == 1) {
             routeChange_setStartEndInfo("e", data.list[0]);
         } else {
@@ -221,24 +223,23 @@ function routeChangeSearchXY() {
     routeSearch.getNaviPath(arr, routeChangeSearchXY_CallBack);
 }
 
-function routeChangeSearchXY_CallBack(data) { //TODO:增加与服务器交互
-    var json = JSON.stringify(data);
-    var conn = new XMLHttpRequest();
-    //conn.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
-    conn.onreadystatechange = function() {
-        console.log(conn.readyState);
-        console.log(conn.status);
-        if (conn.readyState == 4 && conn.status == 200) {
-            alert(conn.responseText);
-        }
-    }
+function routeChangeSearchXY_CallBack(data) {//TODO:增加与服务器交互
+    // var json = JSON.stringify(data);
+    // var conn = new XMLHttpRequest();
+    // //conn.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+    // conn.onreadystatechange = function() {
+        // console.log(conn.readyState);
+        // console.log(conn.status);
+        // if (conn.readyState == 4 && conn.status == 200) {
+            // alert(conn.responseText);
+        // }
+    // }
+// 
+    // conn.open("GET", "../test3.html", true);
+    // conn.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    // conn.send("q=a");
+    // //console.log(json);
 
-    conn.open("GET", "../test3.html", true);
-    conn.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    conn.send("q=a");
-    //console.log(json);
-    
-    
     routeChangeSearchXY_Display(data);
 }
 
@@ -249,7 +250,7 @@ function routeChangeSearchXY_Display(data) {
     var road_length = 0;
     if (data.status == "E0") {
 
-        var route_text = "";
+        var route_text = new Array();
         var route_length = "";
         var route_content = new Array();
         routeS.xy_array = new Array();
@@ -260,9 +261,9 @@ function routeChangeSearchXY_Display(data) {
             //每条线路的坐标
 
             if (i == 0) {
-                route_text += "<tr id=\"tr_" + i + "\" onMouseover=\"driveLineDrawFoldline('" + i + "','" + route_count + "')\"  onMouseout=\"this.style.backgroundColor='';\" onclick=\"driveLineDrawFoldline_click('" + i + "','" + route_count + "')\"><td align=\"left\">" + (i + 1) + ". " + "<span class=\"gray\">沿</span><strong>" + data.list[i].roadName + "</strong>向<strong>" + data.list[i].direction + "</strong><span class=\"gray\">行驶</span>" + " " + data.list[i].roadLength + "</td></tr>";
+                route_text.push("<tr id=\"tr_" + i + "\" onMouseover=\"driveLineDrawFoldline('" + i + "','" + route_count + "')\"  onMouseout=\"this.style.backgroundColor='';this.style.color='#eeeeee';\" onclick=\"driveLineDrawFoldline_click('" + i + "','" + route_count + "')\"><td align=\"left\">" + (i + 1) + ". " + "<span class=\"gray\">沿</span><strong>" + data.list[i].roadName + "</strong>向<strong>" + data.list[i].direction + "</strong><span class=\"gray\">行驶</span>" + " " + data.list[i].roadLength + "</td></tr>");
             } else {
-                route_text += "<tr id=\"tr_" + i + "\" onMouseover=\"driveLineDrawFoldline('" + i + "','" + route_count + "')\"  onMouseout=\"this.style.backgroundColor='';\" onclick=\"driveLineDrawFoldline_click('" + i + "','" + route_count + "')\"><td align=\"left\">" + (i + 1) + ". " + "<strong>" + data.list[i - 1].action + "</strong>" + "<span class=\"gray\">进入</span><strong>" + data.list[i].roadName + "</strong>向<strong>" + data.list[i].direction + "</strong><span class=\"gray\">行驶</span>" + " " + data.list[i].roadLength + " " + "</td></tr>";
+                route_text.push("<tr id=\"tr_" + i + "\" onMouseover=\"driveLineDrawFoldline('" + i + "','" + route_count + "')\"  onMouseout=\"this.style.backgroundColor='';this.style.color='#eeeeee';\" onclick=\"driveLineDrawFoldline_click('" + i + "','" + route_count + "')\"><td align=\"left\">" + (i + 1) + ". " + "<strong>" + data.list[i - 1].action + "</strong>" + "<span class=\"gray\">进入</span><strong>" + data.list[i].roadName + "</strong>向<strong>" + data.list[i].direction + "</strong><span class=\"gray\">行驶</span>" + " " + data.list[i].roadLength + " " + "</td></tr>");
             }
 
             var allover = new Array();
@@ -276,6 +277,7 @@ function routeChangeSearchXY_Display(data) {
             }
 
         }
+        var route_text_str = route_text.join("");
 
         var polyline = new AMap.Polyline({
             id : "polyline01",
@@ -310,7 +312,7 @@ function routeChangeSearchXY_Display(data) {
         allover.push(marker_end);
         mapObj.addOverlays(allover);
         mapObj.setFitView(allover);
-        route_content.push("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" ><tr><td style=\"background:#e1e1e1;\">路线</td></tr><tr><td><img src=\"http://code.mapabc.com/images/start.gif\" />起点：" + routeS.start_displayname + "</td></tr>" + route_text + "<tr><td><img src=\"http://code.mapabc.com/images/end.gif\" />终点：" + routeS.end_displayname + "</td></tr></table>");
+        route_content.push("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" ><tr><td style=\"background:#e1e1e1;color:black;\">路线</td></tr>" + route_text_str + "</table>");
 
         resultStr = route_content.join("");
 
@@ -318,7 +320,7 @@ function routeChangeSearchXY_Display(data) {
 
         resultStr = "没有找到搜索结果,请确保关键字是否正确。";
     }
-    document.getElementById("result").innerHTML = resultStr;
+    document.getElementById("SearchResult").innerHTML = resultStr;
 }
 
 function driveLineDrawFoldline(num, count) {//画线路并控制左边列表.num为第几条线路,count全部线路数.
@@ -326,6 +328,7 @@ function driveLineDrawFoldline(num, count) {//画线路并控制左边列表.num
     var tr_id = "tr_" + num;
 
     document.getElementById(tr_id).style.background = '#efefef';
+    document.getElementById(tr_id).style.color = 'black';
 
     var arr = new Array();
     var poi_xy_r = new Array();
@@ -397,4 +400,8 @@ function TipContents(type, address, tel) {
     var str = "<br>地址：" + address + "<br>电话：" + tel + " <br>类型：" + type;
 
     return str;
+}
+
+function updateCity(city) {
+    $("#city").val(city);
 }

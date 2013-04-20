@@ -4,6 +4,10 @@
 var panelShown = true;
 
 $(document).ready(function() {
+    var availHeight = document.body.clientHeight;
+    var tmp = availHeight - 240;
+    $("#SearchResult").css("height", tmp);
+    
     $("#SidebarButton").click(function() { //控制边栏
         var $sp = $("div#SearchPanel");
         var $map = $("div#MapView");
@@ -45,7 +49,22 @@ $(document).ready(function() {
         $(this).val("");
     });
     
-    $("#CityChoose").click(function(){
+    function toggleChoosePanel(){
         $("#CityChooseBox").slideToggle(250);
+    }
+    
+    $("#CityChoose").click(toggleChoosePanel);
+        
+    $("#CityCommit").click(function(){
+        var a = $("#inputCityBox").val();
+        updateCity(a);
+        toggleChoosePanel();
+    });
+    
+    $("#CityChooseBox .cityname").click(function(){
+        var a = $(this).html();
+        console.log("choose city: " + a);
+        updateCity(a);
+        toggleChoosePanel();
     });
 }); 
