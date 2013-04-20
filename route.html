@@ -15,8 +15,10 @@
             <img id="SidebarButton" src="./images/showsidebar.png">
             <div id="CityOption">
                 <img id="LocBlue" src="./images/locblue.png"/>
-                <div id="ChooseCity">
-                    <p id="CityName">乌鲁木齐</p>
+                <div id="CityChoose">
+                    <p id="CityName">
+                        上海
+                    </p>
                     <img id="OptBlue" src="./images/optblue.png" />
                 </div>
             </div>
@@ -24,21 +26,43 @@
 
         <div id="MapView"></div>
         <div style="z-index:0;position:fixed;top:30%;width:100%;height:100%;">
-            <p style="font-size:30px;text-align:center;color:#2f7d99;">T_T</p>
-            <p style="font-size:12px;text-align:center;color:black;">该死的高德地图打不开了……<br/>要不您检查一下网络连接，<br/>或者过会试试？</p>
+            <p style="font-size:30px;text-align:center;color:#2f7d99;">
+                T_T
+            </p>
+            <p style="font-size:12px;text-align:center;color:black;">
+                该死的高德地图打不开了……
+                <br/>
+                要不您检查一下网络连接，
+                <br/>
+                或者过会试试？
+            </p>
+        </div>
+        <div id="CityChooseBox">
+            <p>
+                北京 上海 广州 天津 深圳 青岛
+            </p>
+            <input type="text" class="inputBox" value="其他" />
+            <div id="CityCommit">
+                提交
+            </div>
         </div>
 
         <div id="SearchPanel" style=";">
-            <div id="SearchPanelLabel"><p>线路检索</p></div>
-            <div id="SearchBox">
-                <input type="hidden" id="city" name="city" value="城市名或区号" />
-                <input type="text" id="startpoint" class="inputBox" name="keyword" value=""/>
-                <img src="./images/locyellow.png" id="UseCurrentPos" style="position:relative;top:5px;left:2px;"/>
-                <input type="text" class="inputBox" id="endpoint" name="keyword1" value=""/>
-                <img src="./images/search.png" id="Search" class="doLocation" style="position:relative;top:5px;left:2px;" />
-                <input type="hidden" id="avoid" name="avoid" />
+            <div id="SearchPanelLabel">
+                <p>
+                    线路检索
+                </p>
             </div>
-            
+            <div id="SearchBox">
+                <input type="hidden" id="city" name="city" value="021" />
+                <input type="hidden" id="avoid" name="avoid" />
+
+                <input type="text" id="startpoint" class="inputBox" name="keyword" value="输入起点"/>
+                <img src="./images/locyellow.png" id="UseCurrentPos" style="position:relative;top:5px;left:2px;"/>
+                <input type="text" class="inputBox" id="endpoint" name="keyword1" value="输入终点"/>
+                <img src="./images/search.png" id="Search" class="doLocation" style="position:relative;top:5px;left:2px;" />
+            </div>
+
             <tr>
                 <td>
                 <div style="padding:0px 0 4px 2px; background-color:#D1EEEE">

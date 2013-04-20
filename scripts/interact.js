@@ -39,4 +39,13 @@ $(document).ready(function() {
         //这里处理搜索的动作，转到routing.js的业务逻辑
         route_search();
     });
+    
+    $(".inputBox").focus(function(){
+        $(this).css("color","black");
+        $(this).val("");
+    });
+    
+    $("#CityChoose").click(function(){
+        $("#CityChooseBox").slideToggle(250);
+    });
 }); 
