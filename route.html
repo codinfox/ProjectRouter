@@ -89,16 +89,41 @@
             </div>
         </div>
 
+        <script src="./scripts/retina.js"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
         <script src="http://webapi.amap.com/maps?v=1.1&key=fce4fe9f75597b394fad3b98ed53e43d"></script>
+        <script src="./scripts/routing.js"></script>
+        <script src="./scripts/interact.js"></script>
         <script>
-            document.ontouchmove = function(e){
+        //笨办法处理手势……有点二说实话，但是是在没想到更好的。或许sencha touch是个更好的选择
+            var x_dis = 0;
+            var y_dis = 0;
+            document.getElementById("SearchPanel").ontouchstart = function(e) {
+                if (e.touches.length == 1) {
+                    x_dis = e.touches[0].screenX;
+                    y_dis = e.touches[0].screenY;
+                }
+            }
+            document.getElementById("SearchPanel").ontouchmove = function(e) {
+
+                if (e.changedTouches.length == 1) {
+                    if (e.changedTouches[0].screenX - x_dis < -5) {
+                        e.preventDefault();
+                        toggleSearchPanel();
+                    } else if (Math.abs(e.changedTouches[0].screenY - y_dis) < 5)
+                        e.preventDefault();
+                } else {
+                    alert("else");
+                    e.preventDefault();
+                }
+                x_dis = 0;
+                y_dis = 0;
+
+            }
+            document.getElementById("NaviBar").ontouchmove = function(e) {
                 e.preventDefault();
             }
         </script>
-        <script src="./scripts/routing.js"></script>
-        <script src="./scripts/interact.js"></script>
-        <script src="./scripts/retina.js"></script>
 
     </body>
 </html>
