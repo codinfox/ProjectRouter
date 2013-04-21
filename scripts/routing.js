@@ -25,6 +25,7 @@ function mapInit() {
         });
         mapObj.addControl(toolbar);
         mapObj.bind(toolbar, "location", function(e) {
+            //$("#SearchResult").html("");
             var center = e.position.center;
             currentPos = center;
             var geocoderOption = {
