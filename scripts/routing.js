@@ -255,7 +255,11 @@ var query_worker;
 // web worker
 
 function routeChangeSearchXY_CallBack(data) {//TODO:增加与服务器交互
-    var json = JSON.stringify(data);
+    if (data.status != "E0") {
+        document.getElementById("SearchResult").innerHTML = "网络导航服务异常，等会再试吧~";
+        return;//TODO test
+    }
+
     if ( typeof (Worker) !== "undefined") {
         if ( typeof (query_worker) == "undefined") {
             query_worker = new Worker("./scripts/query_worker.js");
@@ -265,22 +269,30 @@ function routeChangeSearchXY_CallBack(data) {//TODO:增加与服务器交互
                     query_worker = undefined;
                     document.getElementById("avoid").value = "";
                     routeChangeSearchXY_Display(data);
+                    return;
                 } else if (event.data == "NO") {
-                    alert("附近太堵啦！只能给您返回一条规避尽可能多的拥堵路段的路线了……");
+                    //alert("附近太堵啦！只能给您返回一条规避尽可能多的拥堵路段的路线了……");
                     query_worker.terminate();
                     query_worker = undefined;
                     document.getElementById("avoid").value = "";
                     routeChangeSearchXY_Display(data);
+                    return;
                 } else {
                     var avoidroad = document.getElementById("avoid").value;
-                    avoidroad += event.data;
+                    var tmp = JSON.parse(event.data);
+                    for (var i = 0; i < tmp.length; i++) {
+                        if (avoidroad.indexOf(tmp[i], 0) == -1)
+                            avoidroad = avoidroad + tmp[i] + ",";//待确认
+                    }
+                    // console.log(avoidroad.substring(0, avoidroad.length-1));
+                    console.log(avoidroad);
                     document.getElementById("avoid").value = avoidroad;
-                    console.log(document.getElementById("avoid").value);
                     routeChangeSearchXY();
                 }
             };
+            query_worker.postMessage($("#city").val());
         }
-        query_worker.postMessage(json);
+        query_worker.postMessage(data);
     } else {
         html5error();
     }
