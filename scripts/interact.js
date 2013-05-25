@@ -25,11 +25,16 @@ function toggleSearchPanel() {//控制边栏
     }
 }
 
-
 $(document).ready(function() {
     var availHeight = document.body.clientHeight;
     var tmp = availHeight - 240;
-    $("#SearchResult").css("height", tmp);
+    $("#SearchResult").css("height", tmp);//初始设置result栏的高度，自适应屏幕
+    $("#SearchResult").mouseenter(function() {
+        $(this).css('overflow-y','auto');
+    });
+    $("#SearchResult").mouseleave(function() {
+        $(this).css('overflow-y','hidden');
+    });
 
     $("#SidebarButton").click(toggleSearchPanel);
 
@@ -48,7 +53,7 @@ $(document).ready(function() {
     });
 
     $(".inputBox").focus(function() {
-        $(this).css("color", "black");
+//        $(this).css("color", "black");
         $(this).val("");
     });
 
@@ -95,3 +100,7 @@ $(document).ready(function() {
     });
 
 });
+
+function html5error() {
+    alert("您的浏览器不支持一个或者多个HTML5特性……我不能正常工作啦！！要不您考虑下换个浏览器（比如最新的Chrome或Firefox）？");
+}

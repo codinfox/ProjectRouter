@@ -251,24 +251,39 @@ function routeChangeSearchXY() {
     routeSearch.getNaviPath(arr, routeChangeSearchXY_CallBack);
 }
 
-function routeChangeSearchXY_CallBack(data) {//TODO:增加与服务器交互
-    // var json = JSON.stringify(data);
-    // var conn = new XMLHttpRequest();
-    // //conn.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
-    // conn.onreadystatechange = function() {
-    // console.log(conn.readyState);
-    // console.log(conn.status);
-    // if (conn.readyState == 4 && conn.status == 200) {
-    // alert(conn.responseText);
-    // }
-    // }
-    //
-    // conn.open("GET", "../test3.html", true);
-    // conn.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    // conn.send("q=a");
-    // //console.log(json);
+var query_worker;
+// web worker
 
-    routeChangeSearchXY_Display(data);
+function routeChangeSearchXY_CallBack(data) {//TODO:增加与服务器交互
+    var json = JSON.stringify(data);
+    if ( typeof (Worker) !== "undefined") {
+        if ( typeof (query_worker) == "undefined") {
+            query_worker = new Worker("./scripts/query_worker.js");
+            query_worker.onmessage = function(event) {
+                if (event.data == "OK") {
+                    query_worker.terminate();
+                    query_worker = undefined;
+                    document.getElementById("avoid").value = "";
+                    routeChangeSearchXY_Display(data);
+                } else if (event.data == "NO") {
+                    alert("附近太堵啦！只能给您返回一条规避尽可能多的拥堵路段的路线了……");
+                    query_worker.terminate();
+                    query_worker = undefined;
+                    document.getElementById("avoid").value = "";
+                    routeChangeSearchXY_Display(data);
+                } else {
+                    var avoidroad = document.getElementById("avoid").value;
+                    avoidroad += event.data;
+                    document.getElementById("avoid").value = avoidroad;
+                    console.log(document.getElementById("avoid").value);
+                    routeChangeSearchXY();
+                }
+            };
+        }
+        query_worker.postMessage(json);
+    } else {
+        html5error();
+    }
 }
 
 function routeChangeSearchXY_Display(data) {
@@ -346,7 +361,7 @@ function routeChangeSearchXY_Display(data) {
 
     } else if (data.status != "E0") {
 
-        resultStr = "没有找到搜索结果,请确保关键字是否正确。";
+        resultStr = "没有找到搜索结果,请检查关键字是否正确。";
     }
     document.getElementById("SearchResult").innerHTML = resultStr;
 }
