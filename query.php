@@ -23,7 +23,7 @@ mysql_select_db("ProjectRouter", $conn);
 
 $avoid = array(); //记录是不是库里没有查询路段
 foreach ($roads as $road) {
-    $result = mysql_query("SELECT * FROM ROAD WHERE CITY='" . $_POST['city'] . "' AND NAME='" . $road . "'");
+    $result = mysql_query("SELECT * FROM PR WHERE CITY='" . $_POST['city'] . "' AND ROAD='" . $road . "'");
     if ($result) {
         if (mysql_fetch_array($result, MYSQL_ASSOC)) {
             array_push($avoid, $road);
@@ -35,7 +35,7 @@ foreach ($roads as $road) {
         break;
     }
 }
-array_push($avoid, "曹安公路");//for test
+//array_push($avoid, "曹安公路");//for test
 //array_push($avoid, "绿苑路");
 if (count($avoid) == 0) {
     echo 'OK';

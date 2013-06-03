@@ -51,10 +51,13 @@ mysql_query("set names 'UTF8'", $conn);
 mysql_select_db("ProjectRouter", $conn);
 
 $list = array(); //记录是不是库里没有查询路段
-$result = mysql_query("SELECT * FROM COOR WHERE LNG >= " . $bounds->southwest->lng
+$result = mysql_query("SELECT * FROM PR WHERE LNG >= " . $bounds->southwest->lng
         . " AND LNG <= " . $bounds->northeast->lng
         . " AND LAT >= " . $bounds->southwest->lat
         . " AND LAT <= " . $bounds->northeast->lat);
+
+fb($result, FirePHP::WARN);
+
 if ($result) {
     $ress = null;
     while ($ress = mysql_fetch_array($result)) {

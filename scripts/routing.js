@@ -30,6 +30,7 @@ function mapInit() {
         });
         mapObj.addControl(toolbar);
         mapObj.bind(toolbar, "location", function(e) {
+            updateMarks();
             //$("#SearchResult").html("");
             var center = e.position.center;
             currentPos = center;

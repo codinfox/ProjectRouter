@@ -85,7 +85,10 @@
                 <div style="padding:4px 0px 4px 9px; background-color:#373737;color:#eeeeee;">
                     <b>查询结果</b>
                 </div>
-                <div id="SearchResult" name="result"></div>
+                <div id="SearchResult"></div>
+
+
+
             </div>
         </div>
 
@@ -97,33 +100,33 @@
         <script src="./scripts/overlays.js"></script>
         <script>
         //笨办法处理手势……有点二说实话，但是是在没想到更好的。或许sencha touch是个更好的选择
-            var x_dis = 0;
-            var y_dis = 0;
-            document.getElementById("SearchPanel").ontouchstart = function(e) {
-                if (e.touches.length == 1) {
-                    x_dis = e.touches[0].screenX;
-                    y_dis = e.touches[0].screenY;
-                }
+        var x_dis = 0;
+        var y_dis = 0;
+        document.getElementById("SearchPanel").ontouchstart = function(e) {
+            if (e.touches.length == 1) {
+                x_dis = e.touches[0].screenX;
+                y_dis = e.touches[0].screenY;
             }
-            document.getElementById("SearchPanel").ontouchmove = function(e) {
+        }
+        document.getElementById("SearchPanel").ontouchmove = function(e) {
 
-                if (e.changedTouches.length == 1) {
-                    if (e.changedTouches[0].screenX - x_dis < -5) {
-                        e.preventDefault();
-                        toggleSearchPanel();
-                    } else if (Math.abs(e.changedTouches[0].screenY - y_dis) < 5)
-                        e.preventDefault();
-                } else {
-                    alert("else");
+            if (e.changedTouches.length == 1) {
+                if (e.changedTouches[0].screenX - x_dis < -5) {
                     e.preventDefault();
-                }
-                x_dis = 0;
-                y_dis = 0;
-
-            }
-            document.getElementById("NaviBar").ontouchmove = function(e) {
+                    toggleSearchPanel();
+                } else if (Math.abs(e.changedTouches[0].screenY - y_dis) < 5)
+                    e.preventDefault();
+            } else {
+                alert("else");
                 e.preventDefault();
             }
+            x_dis = 0;
+            y_dis = 0;
+
+        }
+        document.getElementById("NaviBar").ontouchmove = function(e) {
+            e.preventDefault();
+        }
         </script>
 
     </body>

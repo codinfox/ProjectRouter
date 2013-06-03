@@ -25,10 +25,17 @@ function toggleSearchPanel() {//控制边栏
     }
 }
 
-$(document).ready(function() {
+function searchResultResize() {
     var availHeight = document.body.clientHeight;
-    var tmp = availHeight - 240;
+    var tmp = availHeight - 235;
     $("#SearchResult").css("height", tmp);//初始设置result栏的高度，自适应屏幕
+}
+
+$(document).ready(function() {
+    searchResultResize();
+    
+    $(window).resize(searchResultResize);
+    
     // $("#SearchResult").mouseenter(function() {
         // $(this).css('overflow-y','auto');
     // });

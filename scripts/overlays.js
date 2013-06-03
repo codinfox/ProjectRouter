@@ -17,6 +17,7 @@ function updateMarks() {
                 offset: new AMap.Pixel(-8, -34),
                 icon: "images/mark.png"
             });
+//            tmpmarker.setContent("Test Content");
             markers.push(tmpmarker);
         }
         mapObj.addOverlays(markers);
