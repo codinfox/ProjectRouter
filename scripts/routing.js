@@ -55,6 +55,7 @@ function mapInit() {
         });
     });
     //addTileLayer_TRAFFIC();
+    updateMarks();
 }
 
 function addTileLayer_TRAFFIC() {
@@ -441,12 +442,4 @@ function updateCity(city_name) {
     console.log(city_name);
     $("#city").val(city_name);
     $("p#CityName").html(city_name);
-}
-
-function updateMarks() {
-    var data = JSON.stringify(mapObj.getBounds());
-    $.post("../queryloc.php",{query: data}, function(json){
-        var obj = JSON.parse(json);
-        //TODO
-    });
 }
