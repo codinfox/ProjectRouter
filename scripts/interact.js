@@ -6,6 +6,8 @@ var panelShown = true;
 function toggleSearchPanel() {//控制边栏
     var $sp = $("div#SearchPanel");
     var $map = $("div#MapView");
+    $sp.clearQueue();
+    $map.clearQueue();
     if (panelShown) {
         panelShown = false;
         $sp.animate({
@@ -73,6 +75,7 @@ $(document).ready(function() {
 
     $("#CityCommit").click(function() {
         var a = $("#inputCityBox").val();
+        if (a == "") a = "上海";
         updateCity(a);
         toggleChoosePanel();
     });
