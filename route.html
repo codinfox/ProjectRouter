@@ -67,7 +67,7 @@
 
         <div id="SearchPanel" style=";">
             <div id="SearchPanelLabel">
-                <p>
+                <p onclick="refreshCongPoints();">
                     线路检索
                 </p>
             </div>
@@ -94,6 +94,7 @@
         <script src="http://webapi.amap.com/maps?v=1.1&key=fce4fe9f75597b394fad3b98ed53e43d"></script>
         <script src="./scripts/routing.js"></script>
         <script src="./scripts/interact.js"></script>
+        <script src="./scripts/overlays.js"></script>
         <script>
         //笨办法处理手势……有点二说实话，但是是在没想到更好的。或许sencha touch是个更好的选择
             var x_dis = 0;

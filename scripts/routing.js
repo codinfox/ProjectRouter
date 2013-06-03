@@ -8,20 +8,25 @@ var Trafficlay, partition;
 
 function mapInit() {
     var opt = {
-        level : 13,
-        center : new AMap.LngLat(121.49854, 31.28540), //同济大学
-        doubleClickZoom : true,
-        scrollWheel : true
+        level: 13,
+        center: new AMap.LngLat(121.49854, 31.28540), //同济大学
+        doubleClickZoom: true,
+        scrollWheel: true
     }
     mapObj = new AMap.Map("MapView", opt);
+
+    mapObj.bind(mapObj, 'dragend', updateMarks);
+    mapObj.bind(mapObj, 'zoomchange', updateMarks);
+
+
     partition = new AMap.Partition();
     AMap.Conf.network = 1;
     mapObj.plugin(["AMap.ToolBar"], function() {
         toolbar = new AMap.ToolBar({
-            offset : new AMap.Pixel(10, 60),
-            autoPosition : true,
-            ruler : false,
-            direction : false,
+            offset: new AMap.Pixel(10, 60),
+            autoPosition: true,
+            ruler: false,
+            direction: false,
         });
         mapObj.addControl(toolbar);
         mapObj.bind(toolbar, "location", function(e) {
@@ -29,10 +34,10 @@ function mapInit() {
             var center = e.position.center;
             currentPos = center;
             var geocoderOption = {
-                range : 300, // 范围
-                crossnum : 2, // 道路交叉口数
-                roadnum : 3, // 路线记录数
-                poinum : 2 // POI点数
+                range: 300, // 范围
+                crossnum: 2, // 道路交叉口数
+                roadnum: 3, // 路线记录数
+                poinum: 2 // POI点数
             };
             var geocoder = new AMap.Geocoder(geocoderOption);
             geocoder.regeocode(center, function(data) {
@@ -55,10 +60,10 @@ function mapInit() {
 function addTileLayer_TRAFFIC() {
     mapObj.clearOverlays();
     Trafficlay = new AMap.TileLayer({
-        tileSize : 256, //图像大小
-        zIndex : 5,
-        id : "realtime_traffic",
-        getTileUrl : function(x, y, z) {
+        tileSize: 256, //图像大小
+        zIndex: 5,
+        id: "realtime_traffic",
+        getTileUrl: function(x, y, z) {
             return "http://tm.mapabc.com/trafficengine/mapabc/traffictile?v=1.0&;t=1&zoom=" + (17 - z) + "&x=" + x + "&y=" + y;
         }
     });
@@ -135,8 +140,8 @@ function route_search() {
 
 function routeChange_search(city, keywords) {
     var PoiSearchOption = {
-        number : 10, //每页数量
-        batch : 1 //请求页数
+        number: 10, //每页数量
+        batch: 1 //请求页数
     };
     if (keywords == MYPOS) {
         routeChange_useCurrPos();
@@ -235,7 +240,7 @@ function routeChangeSearchXY() {
     var startXY = new AMap.LngLat(routeS.start_x, routeS.start_y);
     var endXY = new AMap.LngLat(routeS.end_x, routeS.end_y);
     var routeSearchOption = {
-        routeType : 4,
+        routeType: 4,
         // avoidType:2,
         // avoidName:"曹安公路"
     };
@@ -260,8 +265,8 @@ function routeChangeSearchXY_CallBack(data) {//TODO:增加与服务器交互
         return;//TODO test
     }
 
-    if ( typeof (Worker) !== "undefined") {
-        if ( typeof (query_worker) == "undefined") {
+    if (typeof (Worker) !== "undefined") {
+        if (typeof (query_worker) == "undefined") {
             query_worker = new Worker("./scripts/query_worker.js");
             query_worker.onmessage = function(event) {
                 if (event.data == "OK") {
@@ -335,23 +340,22 @@ function routeChangeSearchXY_Display(data) {
         var route_text_str = route_text.join("");
 
         var polyline = new AMap.Polyline({
-            id : "polyline01",
-            path : arr,
-            strokeColor : "#003366",
-            strokeOpacity : 0.8,
-            strokeWeight : 4,
-
-            strokeDasharray : [10, 5]
+            id: "polyline01",
+            path: arr,
+            strokeColor: "#003366",
+            strokeOpacity: 0.8,
+            strokeWeight: 4,
+            strokeDasharray: [10, 5]
         });
         allover.push(polyline);
 
         var start = new AMap.LngLat(routeS.start_x, routeS.start_y);
 
         var marker_start = new AMap.Marker({
-            id : "qd",
-            position : start,
-            icon : "./images/qd.png",
-            offset : new AMap.Pixel(-15, -36)
+            id: "qd",
+            position: start,
+            icon: "./images/qd.png",
+            offset: new AMap.Pixel(-15, -36)
         });
 
         allover.push(marker_start);
@@ -359,10 +363,10 @@ function routeChangeSearchXY_Display(data) {
         var end = new AMap.LngLat(routeS.end_x, routeS.end_y);
 
         var marker_end = new AMap.Marker({
-            id : "zd",
-            position : end,
-            icon : "./images/zd.png",
-            offset : new AMap.Pixel(-15, -36)
+            id: "zd",
+            position: end,
+            icon: "./images/zd.png",
+            offset: new AMap.Pixel(-15, -36)
         });
         allover.push(marker_end);
         mapObj.addOverlays(allover);
@@ -395,12 +399,12 @@ function driveLineDrawFoldline(num, count) {//画线路并控制左边列表.num
         arr.push(new AMap.LngLat(arr_lnglat[0], arr_lnglat[1]));
     }
     var line = new AMap.Polyline({
-        id : "polyline_click",
-        path : arr,
-        strokeColor : "#F00",
-        strokeOpacity : 0.8,
-        strokeWeight : 4,
-        strokeDasharray : [10, 5]
+        id: "polyline_click",
+        path: arr,
+        strokeColor: "#F00",
+        strokeOpacity: 0.8,
+        strokeWeight: 4,
+        strokeDasharray: [10, 5]
     });
     mapObj.addOverlays(line);
 
@@ -422,12 +426,12 @@ function driveLineDrawFoldline_click(num, count) {//画线路并控制左边列�
         arr.push(new AMap.LngLat(arr_lnglat[0], arr_lnglat[1]));
     }
     var line = new AMap.Polyline({
-        id : "polyline_click",
-        path : arr,
-        strokeColor : "#F00",
-        strokeOpacity : 0.8,
-        strokeWeight : 4,
-        strokeDasharray : [10, 5]
+        id: "polyline_click",
+        path: arr,
+        strokeColor: "#F00",
+        strokeOpacity: 0.8,
+        strokeWeight: 4,
+        strokeDasharray: [10, 5]
     });
     mapObj.addOverlays(line);
     mapObj.setCenter(arr[parseInt(arr.length / 2)]);
@@ -437,4 +441,12 @@ function updateCity(city_name) {
     console.log(city_name);
     $("#city").val(city_name);
     $("p#CityName").html(city_name);
+}
+
+function updateMarks() {
+    var data = JSON.stringify(mapObj.getBounds());
+    $.post("../queryloc.php",{query: data}, function(json){
+        var obj = JSON.parse(json);
+        //TODO
+    });
 }

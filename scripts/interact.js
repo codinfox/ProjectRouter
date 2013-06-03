@@ -29,12 +29,12 @@ $(document).ready(function() {
     var availHeight = document.body.clientHeight;
     var tmp = availHeight - 240;
     $("#SearchResult").css("height", tmp);//初始设置result栏的高度，自适应屏幕
-    $("#SearchResult").mouseenter(function() {
-        $(this).css('overflow-y','auto');
-    });
-    $("#SearchResult").mouseleave(function() {
-        $(this).css('overflow-y','hidden');
-    });
+    // $("#SearchResult").mouseenter(function() {
+        // $(this).css('overflow-y','auto');
+    // });
+    // $("#SearchResult").mouseleave(function() {
+        // $(this).css('overflow-y','hidden');
+    // });
 
     $("#SidebarButton").click(toggleSearchPanel);
 
