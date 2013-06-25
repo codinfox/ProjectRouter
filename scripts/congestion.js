@@ -41,3 +41,30 @@ function geocallback(info) {
 
     send(cor);
 }
+
+function sensorSpeed(position) { // 速度测试和上报
+    var speed = position.coords.speed;
+    if (speed == null || typeof(speed) === "undefined")
+        $("#curr_speed").html("未知");
+    else {
+        $("#curr_speed").html(speed);
+        if ($("#auto_report").data("checked")) {
+            if (speed <= 5) { // 速度小于5m/s
+                if ((new Date()).getTime() - $("#auto_report").data("last_time") > 600000) {
+                    $("#auto_report").data("last_time", (new Date()).getTime());
+                    report(); //上报
+                }
+            } else {
+                $("#auto_report").data("last_time", (new Date()).getTime());
+            }
+        }
+    }
+}
+
+function autoReport() {
+    if ($("#auto_report").data("checked")) {
+        $("#auto_report").data("checked", false);
+    } else {
+        $("#auto_report").data("checked", true);
+    }
+}

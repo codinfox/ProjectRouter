@@ -93,8 +93,14 @@
 
         <div id="zoom-anim-dialog" class="mfp-ready">
         </div>
-        
-        <div id="speed_button"></div>>
+
+        <div id="speed_button">
+            <img id="speed_img" src="./images/speed.png"/>
+            <div style="display: inline-block; margin-right: 10px; margin-left: 40px;">
+                速度：<span id="curr_speed">未知</span>
+                <input id="auto_report" type="checkbox" />自动上报
+            </div>
+        </div>
 
         <script src="./scripts/retina.js"></script>
         <script src="./scripts/jquery-1.9.1.js"></script>
@@ -106,34 +112,34 @@
         <script src="./scripts/overlays.js"></script>
         <script src="./scripts/congestion.js"></script>
         <script>
-            //笨办法处理手势……有点二说实话，但是是在没想到更好的。或许sencha touch是个更好的选择
-            var x_dis = 0;
-            var y_dis = 0;
-            document.getElementById("SearchPanel").ontouchstart = function(e) {
-                if (e.touches.length == 1) {
-                    x_dis = e.touches[0].screenX;
-                    y_dis = e.touches[0].screenY;
-                }
+        //笨办法处理手势……有点二说实话，但是是在没想到更好的。或许sencha touch是个更好的选择
+        var x_dis = 0;
+        var y_dis = 0;
+        document.getElementById("SearchPanel").ontouchstart = function(e) {
+            if (e.touches.length == 1) {
+                x_dis = e.touches[0].screenX;
+                y_dis = e.touches[0].screenY;
             }
-            document.getElementById("SearchPanel").ontouchmove = function(e) {
+        }
+        document.getElementById("SearchPanel").ontouchmove = function(e) {
 
-                if (e.changedTouches.length == 1) {
-                    if (e.changedTouches[0].screenX - x_dis < -5) {
-                        e.preventDefault();
-                        toggleSearchPanel();
-                    } else if (Math.abs(e.changedTouches[0].screenY - y_dis) < 5)
-                        e.preventDefault();
-                } else {
-                    alert("else");
+            if (e.changedTouches.length == 1) {
+                if (e.changedTouches[0].screenX - x_dis < -5) {
                     e.preventDefault();
-                }
-                x_dis = 0;
-                y_dis = 0;
-
-            }
-            document.getElementById("NaviBar").ontouchmove = function(e) {
+                    toggleSearchPanel();
+                } else if (Math.abs(e.changedTouches[0].screenY - y_dis) < 5)
+                    e.preventDefault();
+            } else {
+                alert("else");
                 e.preventDefault();
             }
+            x_dis = 0;
+            y_dis = 0;
+
+        }
+        document.getElementById("NaviBar").ontouchmove = function(e) {
+            e.preventDefault();
+        }
         </script>
 
     </body>

@@ -34,9 +34,32 @@ function searchResultResize() {
 }
 
 $(document).ready(function() {
+    $(this).data("display", false);
     searchResultResize();
     
     $(window).resize(searchResultResize);
+    
+    $("#speed_button").mouseenter(function(){
+        $("#speed_button").clearQueue();
+        $("#speed_button").fadeTo(100,0.8);
+    });
+    $("#speed_button").mouseleave(function(){
+        $("#speed_button").clearQueue();
+        $("#speed_button").fadeTo(100,0.5);
+    });
+    $("#speed_img").click(function(){
+        if (!$(this).data("display")) {
+            $("#speed_button").animate({
+                width: '250px',
+            },'fast');
+            $(this).data("display", true);
+        } else {
+            $("#speed_button").animate({
+                width: '40px',
+            },'fast');
+            $(this).data("display", false);
+        }
+    });
     
     // $("#SearchResult").mouseenter(function() {
         // $(this).css('overflow-y','auto');

@@ -8,6 +8,14 @@ var Trafficlay, partition;
 
 function mapInit() {
 
+    if (navigator.geolocation) {
+        navigator.geolocation.watchPosition(sensorSpeed);
+    }
+    
+    $("#auto_report").data("checked", false);
+    $("#auto_report").data("last_time", (new Date()).getTime());
+    $("#auto_report").change(autoReport);
+    
     initMsg();
     var opt = {
         level: 13,

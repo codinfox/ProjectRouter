@@ -233,5 +233,26 @@ div#SearchBox {/*起点终点搜索框样式*/
 }
 
 #speed_button {
-    
+    height:40px;
+    width: 40px;
+    border-radius: 20px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    background:#484848;
+    z-index: 1003;
+    box-shadow: 0 0 10px #484848;
+    opacity: 0.5;
+    overflow: hidden;
+    line-height: 40px;
+    text-align: right;
+    color: white;
+}
+
+#speed_img {
+    position: absolute;
+    left: 0;
+    bottom: 0;
 }
