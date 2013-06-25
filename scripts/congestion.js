@@ -29,7 +29,7 @@ function report() {
 }
 
 function send(data) {
-console.log(data);
+    console.log(data);
     var msg = JSON.stringify(data);
     $.post("../insertCong.php", {query: msg});
 }
@@ -66,5 +66,6 @@ function autoReport() {
         $("#auto_report").data("checked", false);
     } else {
         $("#auto_report").data("checked", true);
+        $("#auto_report").data("last_time", (new Date()).getTime());
     }
 }
