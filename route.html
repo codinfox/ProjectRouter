@@ -7,6 +7,7 @@
         <link rel="stylesheet" href="style.css" type="text/css" />
 
         <title>驾车导航查询</title>
+
     </head>
 
     <body onload="mapInit();">
@@ -86,48 +87,53 @@
                     <b>查询结果</b>
                 </div>
                 <div id="SearchResult"></div>
-
-
-
             </div>
+
         </div>
+
+        <div id="zoom-anim-dialog" class="mfp-ready">
+        </div>
+        
+        <div id="speed_button"></div>>
 
         <script src="./scripts/retina.js"></script>
         <script src="./scripts/jquery-1.9.1.js"></script>
+        <script src="./scripts/jquery-ui-1.10.3.custom.min.js"></script>
         <script src="http://webapi.amap.com/maps?v=1.1&key=fce4fe9f75597b394fad3b98ed53e43d"></script>
+        <script src="./scripts/messageReceiver.js"></script> 
         <script src="./scripts/routing.js"></script>
         <script src="./scripts/interact.js"></script>
         <script src="./scripts/overlays.js"></script>
         <script src="./scripts/congestion.js"></script>
         <script>
-        //笨办法处理手势……有点二说实话，但是是在没想到更好的。或许sencha touch是个更好的选择
-        var x_dis = 0;
-        var y_dis = 0;
-        document.getElementById("SearchPanel").ontouchstart = function(e) {
-            if (e.touches.length == 1) {
-                x_dis = e.touches[0].screenX;
-                y_dis = e.touches[0].screenY;
+            //笨办法处理手势……有点二说实话，但是是在没想到更好的。或许sencha touch是个更好的选择
+            var x_dis = 0;
+            var y_dis = 0;
+            document.getElementById("SearchPanel").ontouchstart = function(e) {
+                if (e.touches.length == 1) {
+                    x_dis = e.touches[0].screenX;
+                    y_dis = e.touches[0].screenY;
+                }
             }
-        }
-        document.getElementById("SearchPanel").ontouchmove = function(e) {
+            document.getElementById("SearchPanel").ontouchmove = function(e) {
 
-            if (e.changedTouches.length == 1) {
-                if (e.changedTouches[0].screenX - x_dis < -5) {
+                if (e.changedTouches.length == 1) {
+                    if (e.changedTouches[0].screenX - x_dis < -5) {
+                        e.preventDefault();
+                        toggleSearchPanel();
+                    } else if (Math.abs(e.changedTouches[0].screenY - y_dis) < 5)
+                        e.preventDefault();
+                } else {
+                    alert("else");
                     e.preventDefault();
-                    toggleSearchPanel();
-                } else if (Math.abs(e.changedTouches[0].screenY - y_dis) < 5)
-                    e.preventDefault();
-            } else {
-                alert("else");
+                }
+                x_dis = 0;
+                y_dis = 0;
+
+            }
+            document.getElementById("NaviBar").ontouchmove = function(e) {
                 e.preventDefault();
             }
-            x_dis = 0;
-            y_dis = 0;
-
-        }
-        document.getElementById("NaviBar").ontouchmove = function(e) {
-            e.preventDefault();
-        }
         </script>
 
     </body>

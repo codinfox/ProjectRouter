@@ -7,7 +7,8 @@ var currentPos, currPosGeo;
 var Trafficlay, partition;
 
 function mapInit() {
-    window.scrollTo(0, 1);
+
+    initMsg();
     var opt = {
         level: 13,
         center: new AMap.LngLat(121.49854, 31.28540), //同济大学
