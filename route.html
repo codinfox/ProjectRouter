@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <meta name="viewport" content="initial-scale=1.0, user-scalable=no" >
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width" >
         <meta name="apple-mobile-web-app-capable" content="yes">
         <link rel="stylesheet" href="style.css" type="text/css" />
 
@@ -82,7 +82,7 @@
             </div>
 
             <div style="position:absolute;top:150px;left:0px;width:255px;">
-                <div style="padding:4px 0px 4px 9px; background-color:#373737;color:#eeeeee;">
+                <div style="padding:4px 0px 4px 9px; background-color:#373737;color:#eeeeee;"  onclick="report();">
                     <b>查询结果</b>
                 </div>
                 <div id="SearchResult"></div>
@@ -98,6 +98,7 @@
         <script src="./scripts/routing.js"></script>
         <script src="./scripts/interact.js"></script>
         <script src="./scripts/overlays.js"></script>
+        <script src="./scripts/congestion.js"></script>
         <script>
         //笨办法处理手势……有点二说实话，但是是在没想到更好的。或许sencha touch是个更好的选择
         var x_dis = 0;

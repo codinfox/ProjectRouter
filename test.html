@@ -1,0 +1,28 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no" >
+
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script>
+            function test() {
+               console.log(navigator.geolocation); 
+                navigator.geolocation.getCurrentPosition(function(data) {
+                    console.log(data);
+                    document.getElementById("div").innerHTML = data.coords.speed;
+                }, function(e) {
+                    console.log(e);
+                });
+
+            }
+        </script>
+    </head>
+    <body>
+        <div id="div" onclick="test();">TODO write content</div>
+    </body>
+</html>

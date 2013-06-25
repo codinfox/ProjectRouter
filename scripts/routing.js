@@ -7,6 +7,7 @@ var currentPos, currPosGeo;
 var Trafficlay, partition;
 
 function mapInit() {
+    window.scrollTo(0, 1);
     var opt = {
         level: 13,
         center: new AMap.LngLat(121.49854, 31.28540), //同济大学
@@ -17,6 +18,8 @@ function mapInit() {
 
     mapObj.bind(mapObj, 'dragend', updateMarks);
     mapObj.bind(mapObj, 'zoomchange', updateMarks);
+    mapObj.bind(mapObj, 'touchend', updateMarks);
+    mapObj.bind(mapObj, 'gestureend', updateMarks);
 
 
     partition = new AMap.Partition();
@@ -30,6 +33,7 @@ function mapInit() {
         });
         mapObj.addControl(toolbar);
         mapObj.bind(toolbar, "location", function(e) {
+            console.log("LOCATION$$$$$$");
             updateMarks();
             //$("#SearchResult").html("");
             var center = e.position.center;
@@ -102,12 +106,12 @@ function routeSearch() {
     this.end_detailLink = "";
     this.end_type = "";
     this.end_displayname = "";
-    this.x_array
-    this.y_array
-    this.x_c_array
-    this.y_c_array
-    this.xy_array
-    this.xy_c_array
+    this.x_array;
+    this.y_array;
+    this.x_c_array;
+    this.y_c_array;
+    this.xy_array;
+    this.xy_c_array;
 }
 
 var routeS = new routeSearch();
