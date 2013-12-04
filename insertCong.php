@@ -5,9 +5,7 @@ require_once("./FirePHPCore/fb.php");
 ob_start();
 fb($_POST['query'], FirePHP::INFO);
 
-$servername = "localhost:8889";
-$username = "root";
-$password = "root";
+include("./mysqlinfo.php");
 
 $query = $_POST['query'];
 $point = json_decode($query);

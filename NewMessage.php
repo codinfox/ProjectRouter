@@ -4,9 +4,7 @@ ob_start();
 fb($_POST['msg'], FirePHP::INFO);
 
 function insertMsg() {
-    $servername = "localhost:8889";
-    $username = "root";
-    $password = "root";
+include("./mysqlinfo.php");
 
     $query = $_POST['query'];
     $point = json_decode($query);
@@ -82,11 +80,25 @@ if ($_POST['msg'])    insertMsg();
     </head>
 
     <body>
-
+<?php 
+if ($_POST['username'] != 'admin' || $_POST['password'] != 'admin') {
+?>
+                <form action="NewMessage.php" method="POST">
+                    <br/><br/><br/><br/>
+                    Username: <input name="username" type="input" /><br/>
+                    Password: <input name="password" type="password" /><br/>
+                    <input type="submit" value="submit">
+                </form>
+<?php 
+} else {
+?>
         <form action="NewMessage.php" method="POST">
             <textarea name="msg" placeholder="在这里输入需要公告的信息"></textarea><br/>
             <input type="submit" value="广  播" />
         </form>
+        <?php
+}
+        ?>
 
     </body>
 </html>

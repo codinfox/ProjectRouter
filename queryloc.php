@@ -6,9 +6,7 @@ ob_start();
 fb($_POST['query'], FirePHP::INFO);
 
 
-$servername = "localhost:8889";
-$username = "root";
-$password = "root";
+include("./mysqlinfo.php");
 
 class Lnglat {
 

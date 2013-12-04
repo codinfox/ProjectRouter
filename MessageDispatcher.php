@@ -3,9 +3,7 @@ require_once("./FirePHPCore/fb.php");
 ob_start();
 
     
-$servername = "localhost:8889";
-$username = "root";
-$password = "root";
+include("./mysqlinfo.php");
 
 $conn = mysql_connect($servername, $username, $password);
 if (!$conn) {

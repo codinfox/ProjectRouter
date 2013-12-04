@@ -5,17 +5,25 @@ var MYPOS = "我的位置";
 var mapObj, toolbar, overview;
 var currentPos, currPosGeo;
 var Trafficlay, partition;
+var finalSearchData;
 
 function mapInit() {
 
+    speed_options = {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
+    };
+
+
     if (navigator.geolocation) {
-        navigator.geolocation.watchPosition(sensorSpeed);
+        navigator.geolocation.watchPosition(sensorSpeed, sensorSpeedErr, speed_options);
     }
-    
+
     $("#auto_report").data("checked", false);
     $("#auto_report").data("last_time", (new Date()).getTime());
     $("#auto_report").change(autoReport);
-    
+
     initMsg();
     var opt = {
         level: 13,
@@ -56,6 +64,7 @@ function mapInit() {
             var geocoder = new AMap.Geocoder(geocoderOption);
             geocoder.regeocode(center, function(data) {
                 currPosGeo = data;
+                console.log(data);
                 partition.byCity(data.list[0].city.citycode, function(data1) {
                     var cityname;
                     if (data1.status == "E0") {
@@ -66,6 +75,7 @@ function mapInit() {
                     updateCity(cityname);
                 });
             });
+//            updateCity('上海');
         });
     });
     //addTileLayer_TRAFFIC();
@@ -163,6 +173,8 @@ function routeChange_search(city, keywords) {
     } else {
         var MSearch = new AMap.PoiSearch(PoiSearchOption);
         MSearch.byKeywords(keywords, city, routeChange_search_CallBack);
+        console.log(keywords);
+        console.log(city);
     }
 
 }
@@ -183,8 +195,10 @@ function routeChange_choose(option, index) {
 
 function routeChange_multipleChoice(option, data) {
     var msg = "";
+//    alert(data.record);
     for (var i = 0; i < data.record; i++) {
         msg += "<tr onclick=\"routeChange_choose('" + option + "'," + i + ");void(0);\"><td align=\"left\">" + (i + 1) + ". " + data.list[i].name + "</td></tr>";
+//        alert(data.list[i].name);
     }
     var n;
     if (option == "s")
@@ -195,6 +209,7 @@ function routeChange_multipleChoice(option, data) {
         n = "error";
     var disp = "<table><td><tr><strong>" + n + "关键字对应多条结果，请选择：</strong></tr>" + msg + "</td></table>";
     document.getElementById("SearchResult").innerHTML = disp;
+//    alert(document.getElementById("SearchResult").innerHTML);
 }
 
 function routeChange_setStartEndInfo(option, data) {
@@ -226,21 +241,23 @@ var query_data;
 function routeChange_search_CallBack(data) {
     query_data = data;
     if (routeS.routeSType == "s") {
-        if (data.list == null) {
+        if (data.status != 'E0') {
             document.getElementById("SearchResult").innerHTML = "起点未查找到任何结果!<br />建议：<br />1.请确保所有字词拼写正确。<br />2.尝试不同的关键字。<br />3.尝试更宽泛的关键字。";
         } else if (data.record == 1) {
             routeChange_setStartEndInfo("s", data.list[0]);
-        } else {
+        } else if (data.record > 1) {
             routeChange_multipleChoice("s", data);
         }
     } else if (routeS.routeSType == "e") {
-
-        if (data.status == "E1") {
+        console.log(data);
+        if (data.status != "E0") {
             document.getElementById("SearchResult").innerHTML = "终点未查找到任何结果!<br />建议：<br />1.请确保所有字词拼写正确。<br />2.尝试不同的关键字。<br />3.尝试更宽泛的关键字。";
         } else if (data.record == 1) {
             routeChange_setStartEndInfo("e", data.list[0]);
-        } else {
+        } else if (data.record > 1) {
             routeChange_multipleChoice("e", data);
+        } else {
+            alert(data.status);
         }
     }
 }
@@ -251,6 +268,7 @@ function routechange_EndSearch() {
 }
 
 function routeChangeSearchXY() {
+    console.log('in routeChangeSearchXY');
     var avoidroad = document.getElementById("avoid").value;
     var startXY = new AMap.LngLat(routeS.start_x, routeS.start_y);
     var endXY = new AMap.LngLat(routeS.end_x, routeS.end_y);
@@ -288,14 +306,18 @@ function routeChangeSearchXY_CallBack(data) {//TODO:增加与服务器交互
                     query_worker.terminate();
                     query_worker = undefined;
                     document.getElementById("avoid").value = "";
-                    routeChangeSearchXY_Display(data);
+                    console.log(data);
+                    console.log('~~OK');
+                    routeChangeSearchXY_Display(finalSearchData);
                     return;
                 } else if (event.data == "NO") {
                     //alert("附近太堵啦！只能给您返回一条规避尽可能多的拥堵路段的路线了……");
                     query_worker.terminate();
                     query_worker = undefined;
                     document.getElementById("avoid").value = "";
-                    routeChangeSearchXY_Display(data);
+                    console.log(data);
+                    console.log('~~NO');
+                    routeChangeSearchXY_Display(finalSearchData);
                     return;
                 } else {
                     var avoidroad = document.getElementById("avoid").value;
@@ -304,15 +326,19 @@ function routeChangeSearchXY_CallBack(data) {//TODO:增加与服务器交互
                         if (avoidroad.indexOf(tmp[i], 0) == -1)
                             avoidroad = avoidroad + tmp[i] + ",";//待确认
                     }
-                    // console.log(avoidroad.substring(0, avoidroad.length-1));
+                    console.log(avoidroad.substring(0, avoidroad.length-1));
                     console.log(avoidroad);
-                    document.getElementById("avoid").value = avoidroad;
+                    document.getElementById("avoid").value = avoidroad.substring(0, avoidroad.length-1);
+                                        console.log(data);
+                    console.log('~~PENDING');
                     routeChangeSearchXY();
                 }
             };
             query_worker.postMessage($("#city").val());
         }
+                finalSearchData = data;
         query_worker.postMessage(data);
+        
     } else {
         html5error();
     }

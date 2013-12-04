@@ -5,9 +5,7 @@ require_once("./FirePHPCore/fb.php");
 ob_start();
 fb($_POST['query'], FirePHP::INFO);
 
-$servername = "localhost:8889";
-$username = "root";
-$password = "root";
+include("./mysqlinfo.php");
 
 $query = $_POST['query'];
 $roads = json_decode($query);
@@ -23,7 +21,9 @@ mysql_select_db("ProjectRouter", $conn);
 
 $avoid = array(); //记录是不是库里没有查询路段
 foreach ($roads as $road) {
-    $result = mysql_query("SELECT * FROM PR WHERE CITY='" . $_POST['city'] . "' AND ROAD='" . $road . "'");
+//    $result = mysql_query("SELECT * FROM PR WHERE CITY='" . $_POST['city'] . "' AND ROAD='" . $road . "'");
+        $result = mysql_query("SELECT * FROM PR WHERE ROAD='" . $road . "'");
+
     if ($result) {
         if (mysql_fetch_array($result, MYSQL_ASSOC)) {
             array_push($avoid, $road);
